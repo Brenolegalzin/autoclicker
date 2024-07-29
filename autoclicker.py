@@ -5,17 +5,41 @@ from threading import Thread
 screen = tkinter.Tk()
 screen.title("autoclicker TK")
 screen.geometry("800x500")
-Text1 = tkinter.Label(screen, text="digite o tempo entre os clicks(apenas numeros)")
+Text1 = tkinter.Label(screen, text="coloque o tempo entre os clicks(apenas numeros)")
 Text1.pack()
-Input = tkinter.Entry(screen)
-Input.pack()
+tempoEntreOsClicks = 0
+def aumentarFunc():
+	global tempoEntreOsClicks
+	tempoEntreOsClicks += 1
+	quantidade.config(text=tempoEntreOsClicks)
+aumentar = tkinter.Button(screen, text="+", command=aumentarFunc)
+aumentar.pack()
+quantidade = tkinter.Label(screen, text="0")
+quantidade.pack()
+def diminuirFunc():
+	global tempoEntreOsClicks
+	if tempoEntreOsClicks<=0:
+		tempoEntreOsClicks += 1
+	tempoEntreOsClicks -= 1
+	quantidade.config(text=tempoEntreOsClicks)
+diminuir = tkinter.Button(screen, text="-", command=diminuirFunc)
+diminuir.pack()
 Text2 = tkinter.Label(screen, text="digite esquerda ou direita sem maiuscula ou qualquer mudanca, isso determina qual lado do mouse")
 Text2.pack()
-Input2 = tkinter.Entry(screen)
-Input2.pack()
+def buttonLeftFunc():
+	global leftOrRight
+	leftOrRight = "esquerda"
+buttonLeft = tkinter.Button(screen, text="Esquerda", command=buttonLeftFunc)
+buttonLeft.pack()
+def buttonRightFunc():
+	global leftOrRight
+	leftOrRight = "direita"
+buttonRight = tkinter.Button(screen, text="Direita", command=buttonRightFunc)
+buttonRight.pack()
 pyautogui.FAILSAFE = False
 count = 10
 clicksAtivado = False
+leftOrRight = "esquerda"
 def cliques():
 	global count,clicksAtivado
 	while clicksAtivado:
@@ -25,11 +49,10 @@ def cliques():
 			screen.update()
 			Text3.config(text=count)
 		else:
-			time.sleep(float(Input.get()))
-			clique = Input2.get()
-			if clique=="esquerda":
+			time.sleep(float(tempoEntreOsClicks))
+			if leftOrRight=="esquerda":
 				pyautogui.click(button="left")
-			elif clique=="direita":
+			elif leftOrRight=="direita":
 				pyautogui.click(button="right")
 			else:
 				pyautogui.click(button="left")
